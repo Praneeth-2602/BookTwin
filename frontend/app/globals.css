@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f5f0e8;
+  --ink: #1a1410;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* lined-paper texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 27px,
+    rgba(180,160,130,0.15) 27px,
+    rgba(180,160,130,0.15) 28px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
