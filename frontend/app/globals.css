@@ -12,6 +12,7 @@
 body {
   background: var(--bg);
   color: var(--ink);
+  overflow-x: hidden;
 }
 
 /* lined-paper texture */
@@ -26,4 +27,54 @@ body::after {
   );
   pointer-events: none;
   z-index: 0;
+}
+
+/* Custom selection */
+::selection {
+  background: rgba(127, 119, 221, 0.2);
+  color: #1a1410;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 20, 16, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 20, 16, 0.25);
+}
+
+/* Vertical text for book spine */
+.vertical-rl {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Wax seal button base */
+.wax-seal-btn {
+  background-color: #1a1410;
+  color: #f5f0e8;
+  transition: all 0.3s ease;
+}
+.wax-seal-btn:hover:not(:disabled) {
+  background-color: #2d1f0e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26,20,16,0.15);
+}
+
+/* Left panel pattern stripe */
+.spine-pattern {
+  background-image: repeating-linear-gradient(
+    0deg,
+    #2d1f0e,
+    #2d1f0e 2px,
+    transparent 2px,
+    transparent 6px
+  );
 }
