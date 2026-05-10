@@ -3,6 +3,13 @@
 import { motion } from "framer-motion";
 import { MoodSelector } from "./MoodSelector";
 import { PipelineLog } from "./PipelineLog";
+import { GraphPanel } from "./GraphPanel";
+import { ChatPanel } from "./ChatPanel";
+import { HistoryPanel } from "./HistoryPanel";
+import { ProfileSidebar } from "./ProfileSidebar";
+import { ComparePanel } from "./ComparePanel";
+import { DebatePanel } from "./DebatePanel";
+import { PlanPanel } from "./PlanPanel";
 
 interface LeftPanelProps {
   activeTab: string;
@@ -16,9 +23,11 @@ interface LeftPanelProps {
   loading: boolean;
   handleSubmit: () => void;
   pipelineStep: number;
+  graphPrefillTitle?: string;
+  onRerunFromHistory: (mood: string, books: string[]) => void;
 }
 
-const TABS = ["Recommend", "Graph", "Chat", "History"];
+const TABS = ["Recommend", "Graph", "Chat", "Compare", "Debate", "Plan", "History"];
 
 export function LeftPanel({
   activeTab,
@@ -32,15 +41,14 @@ export function LeftPanel({
   loading,
   handleSubmit,
   pipelineStep,
+  graphPrefillTitle,
+  onRerunFromHistory,
 }: LeftPanelProps) {
   return (
-    <div className="w-full lg:w-[38vw] lg:min-h-screen bg-[#ede8de] border-r border-[rgba(26,20,16,0.1)] lg:fixed lg:top-0 lg:left-0 flex flex-col z-20">
-      
-      {/* Decorative left stripe pattern */}
+    <div className="w-full lg:w-[38vw] lg:min-h-screen lg:h-screen bg-[#ede8de] border-r border-[rgba(26,20,16,0.1)] lg:fixed lg:top-0 lg:left-0 flex flex-col z-20 overflow-y-auto">
       <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-2 spine-pattern opacity-10" />
 
       <div className="flex-1 flex flex-col px-8 py-10 lg:pl-16 lg:pr-12 h-full overflow-y-auto">
-        
         {/* Identity Block */}
         <div className="mb-10 pt-2">
           <div className="flex items-center gap-2 mb-4">
@@ -77,7 +85,7 @@ export function LeftPanel({
           ))}
         </div>
 
-        {/* Form area (only visible if Recommend is active) */}
+        {/* ── Tab: Recommend ── */}
         {activeTab === "Recommend" && (
           <div className="flex-1 flex flex-col">
             <Label>Your reading mood</Label>
@@ -89,9 +97,7 @@ export function LeftPanel({
             <div className="flex flex-col gap-2 mb-8">
               {books.map((b, i) => (
                 <div key={i} className="flex items-center gap-2 group relative">
-                  {/* Focus line */}
                   <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#d4380d] opacity-0 group-focus-within:opacity-100 transition-opacity" />
-                  
                   <span className="text-[11px] text-[rgba(26,20,16,0.3)] w-4 shrink-0 font-mono ml-2">
                     {i + 1}.
                   </span>
@@ -105,13 +111,7 @@ export function LeftPanel({
                           ? "e.g. The Secret History"
                           : ""
                     }
-                    className="
-                      flex-1 px-3 py-2 text-[12px] font-mono
-                      bg-transparent border-b border-[rgba(26,20,16,0.1)]
-                      text-[#1a1410] placeholder:text-[rgba(26,20,16,0.3)]
-                      outline-none focus:border-[#1a1410]
-                      transition-colors
-                    "
+                    className="flex-1 px-3 py-2 text-[12px] font-mono bg-transparent border-b border-[rgba(26,20,16,0.1)] text-[#1a1410] placeholder:text-[rgba(26,20,16,0.3)] outline-none focus:border-[#1a1410] transition-colors"
                   />
                 </div>
               ))}
@@ -125,27 +125,18 @@ export function LeftPanel({
                 onChange={(e) => setExtra(e.target.value)}
                 rows={2}
                 placeholder="e.g. No romance subplots. Under 400 pages. Set in a city..."
-                className="
-                  w-full px-3 py-2.5 text-[12px] font-mono ml-2
-                  bg-transparent border-b border-[rgba(26,20,16,0.1)]
-                  text-[#1a1410] resize-none placeholder:text-[rgba(26,20,16,0.3)]
-                  outline-none focus:border-[#1a1410]
-                  transition-colors
-                "
+                className="w-full px-3 py-2.5 text-[12px] font-mono ml-2 bg-transparent border-b border-[rgba(26,20,16,0.1)] text-[#1a1410] resize-none placeholder:text-[rgba(26,20,16,0.3)] outline-none focus:border-[#1a1410] transition-colors"
               />
             </div>
 
-            {/* Space filler to push button down */}
             <div className="flex-1" />
 
-            {/* Pipeline trace if running/done */}
             {(loading || pipelineStep >= 0) && (
               <div className="mb-6">
                 <PipelineLog activeIndex={pipelineStep} />
               </div>
             )}
 
-            {/* Submit button */}
             <button
               onClick={handleSubmit}
               disabled={loading}
@@ -163,13 +154,56 @@ export function LeftPanel({
                 "Find my twin →"
               )}
             </button>
+
+            <ProfileSidebar />
           </div>
         )}
 
-        {/* Other tabs placeholder */}
-        {activeTab !== "Recommend" && (
-          <div className="flex-1 flex items-center justify-center text-[12px] font-mono text-[rgba(26,20,16,0.4)] border border-dashed border-[rgba(26,20,16,0.1)] rounded-lg">
-            {activeTab} view not implemented yet.
+        {/* ── Tab: Graph ── */}
+        {activeTab === "Graph" && (
+          <div className="flex-1">
+            <GraphPanel prefillTitle={graphPrefillTitle} />
+          </div>
+        )}
+
+        {/* ── Tab: Chat ── */}
+        {activeTab === "Chat" && (
+          <div className="flex-1">
+            <ChatPanel />
+          </div>
+        )}
+
+        {/* ── Tab: Compare ── */}
+        {activeTab === "Compare" && (
+          <div className="flex-1">
+            <ComparePanel />
+          </div>
+        )}
+
+        {/* ── Tab: Debate ── */}
+        {activeTab === "Debate" && (
+          <div className="flex-1">
+            <DebatePanel />
+          </div>
+        )}
+
+        {/* ── Tab: Plan ── */}
+        {activeTab === "Plan" && (
+          <div className="flex-1">
+            <PlanPanel />
+          </div>
+        )}
+
+        {/* ── Tab: History ── */}
+        {activeTab === "History" && (
+          <div className="flex-1">
+            <HistoryPanel
+              onRerun={(m, b) => {
+                setMood(m);
+                b.forEach((book, i) => updateBook(i, book));
+                setActiveTab("Recommend");
+              }}
+            />
           </div>
         )}
       </div>
