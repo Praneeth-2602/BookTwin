@@ -4,6 +4,12 @@ pydantic==2.10.3
 langchain
 langchain-groq
 langchain-core
+langchain-community
 langgraph
 python-dotenv==1.0.1
 httpx==0.28.1
+pypdf==4.2.0
+langchain-ollama
+faiss-cpu
+python-multipart
+icalendar==6.0.0

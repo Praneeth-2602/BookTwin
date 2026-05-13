@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+
+# Python cache
+**/__pycache__/
+**/**/__pycache__/
+*.pyc
+
+# VSCode
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Misc
+backend.zip
